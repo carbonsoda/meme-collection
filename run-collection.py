@@ -1,4 +1,5 @@
 import csv
+import os
 import pandas as pd
 from collections import defaultdict
 from memecollection import MemeCollection, EntryCollection
@@ -40,6 +41,18 @@ def getmemes_search(tags_list, desired_count):
     return memesearch_urls
 
 
+# Prevent overwriting
+def checkexisting(savefile, ext='.csv'):
+    file = savefile + ext
+    i = 1
+    while True:
+        if os.path.exists(file):
+            file = savefile + '_' + str(i) + ext
+            i += 1
+        else:
+            return file
+
+
 page_count = 5  # 16 memes/page
 
 meme_types = ['catchphrase', 'snowclone', 'emoticon', 'slang', 'hashtag']
@@ -53,7 +66,9 @@ master_urls = {**types_urls, **search_urls}
 master_listform = [(term, memeurl) for term, urls in master_urls.items() for memeurl in urls]
 
 df = pd.DataFrame.from_records(master_listform, columns=['meme type', 'url'])
-df.to_csv('output/master_urls.csv', index=False)
+
+savename = checkexisting('./output/master_urls', ext='.csv')
+df.to_csv(savename, index=False)
 
 
 
