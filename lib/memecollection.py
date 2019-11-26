@@ -12,7 +12,7 @@ class MemeCollection:
 
     def getHTMLContent(self, link):
         html = urlopen(link)
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
         return soup
 
     # Accounts for varying lengths of subcategories, ie 14 vs 300 entries
@@ -45,7 +45,6 @@ class MemeCollection:
 
         entry_table = content.find('table', {'class': 'entry_list'})
         if not entry_table:
-            print(page_url)
             return entry_urls, True
         entry_rows = entry_table.find_all('tr')
 
@@ -58,7 +57,8 @@ class MemeCollection:
                         return entry_urls, True
                     else:
                         entry_link = entry.find('a')
-                        entry_urls.append(entry_link.get('href'))
+                        entry_title = entry.find('img')
+                        entry_urls.append((entry_title.get('title'), entry_link.get('href')))
 
         return entry_urls, False
 

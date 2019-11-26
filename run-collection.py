@@ -72,20 +72,15 @@ def checkexisting(savefile, ext='.csv'):
             return file
 
 
-# Compile into master dict of lists, to then compile into a master list of tuples (meme, url)
+# Compile given memes_dict into a dataframe and save it
 def build_df(memes_dict, savefile):
-    # compile given memes_dict into a master list of tuples (meme, url)
-    list_form = [
-        (
-            term,
-            memeurl,
-            memeurl.rsplit('/memes/')[1].replace('-', ' ')
-        )
-        for term, urls in memes_dict.items()
-        for memeurl in urls
-    ]
+    # compile given memes_dict into a master list of tuples (type/tag, title, url)
+    list_form = [(term, memeurl[0], memeurl[1])
+                 for term, urls in memes_dict.items()
+                 for memeurl in urls
+                 ]
 
-    df = pd.DataFrame.from_records(list_form, columns=['meme type', 'url', 'meme'])
+    df = pd.DataFrame.from_records(list_form, columns=['meme type', 'meme', 'url'])
     df.drop_duplicates('url', keep='first', inplace=True)
     df.dropna()  # might not need
 
@@ -109,3 +104,5 @@ search_urls = getmemes_search(search_queries, page_count)
 masterdf = build_df({**types_urls, **search_urls}, './output/master_urls')
 # search urls may require some hand care
 searchdf = build_df(search_urls, './output/search_urls')
+
+# entry analysis code belongs here
