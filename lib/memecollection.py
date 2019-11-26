@@ -1,6 +1,7 @@
+import requests
+from urllib.error import HTTPError
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import requests
 
 
 class MemeCollection:
@@ -17,7 +18,10 @@ class MemeCollection:
     # Accounts for varying lengths of subcategories, ie 14 vs 300 entries
     # returns int for maximum pages
     def get_page_limit(self, base_url, desired_limit):
-        content = self.getHTMLContent(base_url)
+        try:
+            content = self.getHTMLContent(base_url)
+        except HTTPError:
+            return 0
 
         pagination = content.find('div', {'class': 'pagination'})
 
@@ -120,5 +124,4 @@ class EntryCollection:
             tagtext = tag.get('text')
             tags.append(tagtext)
         entry['tags'] = tags
-
 
