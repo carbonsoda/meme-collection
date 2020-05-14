@@ -84,44 +84,9 @@ class MemeCollection:
     def collect_categories(self, category):
         base = 'types/'
 
-    def collect_searches(self, search_tag):
+    def collect_tags(self, meme_tag):
         prefix = 'search?context=entries&page='
-        suffix = '&q=tags%3A%28"' + str(search_tag) + '"%29+status%3Aconfirmed&sort=reverse-chronological'
+        suffix = '&q=tags%3A%28"' + str(meme_tag) + '"%29+status%3Aconfirmed&sort=reverse-chronological'
 
 
-class EntryCollection:
-    def __init__(self, parent=None):
-        self.root = 'https://knowyourmeme.com/'
-
-    def getHTMLContent(self, entry_url):
-        html = urlopen('https://knowyourmeme.com/' + entry_url)
-        soup = BeautifulSoup(html, 'html.parser')
-        return soup
-
-    def entry_info(self, entry_url):
-        entry = {
-            'title': '',
-            'type': [],  # in case additional types
-            'year': '',
-            'origin': '',  # could be interesting
-            'tags': [],
-        }
-        content = self.getHTMLContent(entry_url)
-
-        title_info = content.find_all('section', {'class': 'info'}).find('h1')
-        entry['title'] = info.find('h1').get('text')
-
-        meme_info = content.find('aside', {'class': 'left'})
-        stats = meme_info.find('dl')  # first one
-        info_headers = stats.find_all('dt')
-        info_subheaders = stats.find_all('dd')
-        headers = [stat.get('text').lower() for stat in info_headers]
-
-
-        tags_info = meme_info.find('dl', {'id': 'entry_tags'}).find('dd')
-        tags = []
-        for tag in tags_info:
-            tagtext = tag.get('text')
-            tags.append(tagtext)
-        entry['tags'] = tags
 

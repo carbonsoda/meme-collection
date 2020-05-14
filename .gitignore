@@ -1,9 +1,6 @@
 
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/meme-collection.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
+.idea/*
 *.pyc
 .idea/workspace.xml
 .idea/.gitignore
+lib/fileoperations.py
