@@ -31,6 +31,22 @@ class MemeTrends:
 
         return trendslist, trendmissing
 
+    def makeupmissing(self, memestxtlist):
+        trendslist = []
+        trendmissing = []
+
+        for meme in memestxtlist:
+            memetrend = self.getmemetrend(meme)
+
+            if type(memetrend) == pd.DataFrame:
+                memetrend = memetrend.drop(columns="isPartial")
+                trendslist.append(memetrend)
+            else:
+                trendmissing.append(meme)
+
+        trendsdf = self.join_dfs(trendslist)
+        return trendsdf, trendmissing
+
     # Gets Google Trend for individual meme
     # cat=299 is for "Online Communities"
     def getmemetrend(self, memetxt, cat=299, retry=0):
@@ -43,10 +59,12 @@ class MemeTrends:
         if memetrend.empty:
             if retry == 0:
                 # try just without punctuation
-                self.getmemetrend(self.removepunc(memetxt), retry=1)
+                return self.getmemetrend(self.removepunc(memetxt), retry=1)
             elif retry == 1:
                 # try just general category 0
-                self.getmemetrend(memetxt, cat=0, retry=2)
+                return self.getmemetrend(memetxt, cat=0, retry=2)
+            else:
+                return None
         return memetrend
 
     def buildpayload(self, memetxt, cat, retry=0):

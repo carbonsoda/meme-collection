@@ -4,7 +4,7 @@ from collections import defaultdict
 from lib.memecollection import MemeCollection, EntryCollection
 
 # DESIRED MEMES #
-MEME_TYPES = ['catchphrase', 'snowclone', 'emoticon', 'slang', 'hashtag', 'copypasta']
+MEME_TYPES = ['catchphrase', 'snowclone', 'emoticon', 'slang', 'hashtag', 'copypasta', 'exploitable']
 MEME_TAGS = [  # Picks up confirmed memes which have NO type assigned
     'quote', 'engrish', 'rage-comics', 'reaction', 'expression',
     'copypasta', 'catchphrase', 'snowclone', 'phrasal-template'
